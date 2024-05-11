@@ -1,0 +1,63 @@
+create table account
+(
+acc_no int(20),
+name varchar(20),
+amount int(20)
+);
+
+insert into account values
+(1,'RAJ',2000),
+(2,'AJAY',3000),
+(3,'RAHUL',6000);
+(4,'AMIT',7000);
+(5,'SATISH',8000);
+        
+select * from account;
+ 
+create table account_log
+(
+acc_no int(20),
+name varchar(20),
+amount int(20),
+tran_type varchar(20),
+tran_time timestamp
+)
+;
+ 
+desc account;
+ 
+desc account_log;
+
+ 
+create trigger acc_log
+after update
+on account
+for each row
+begin
+ declare tran_type varchar(20);
+ declare amt varchar(20);
+if old.amount > new.amount then
+SET tran_type='Withdraw';
+SET amt=old.amount-new.amount;
+ else
+ SET tran_type='Deposited';
+ SET amt=new.amount-old.amount;
+ end if;
+ insert into account_log values(old.acc_no,old.name,amt,tran_type,now());
+ end
+ //
+ 
+select * from account//
+
+ 
+update account set amount=5000 where acc_no=1//
+
+select * from account//
+
+select * from account_log//
+ 
+select * from account//
+ 
+update account set amount=4000 where acc_no=1//
+ 
+select * from account_log//

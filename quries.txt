@@ -1,0 +1,199 @@
+List the names of analysts and salesmen.
+
+SELECT *
+FROM employees
+WHERE job IN ('ANALYST', 'SALESMAN');
+
+
+List details of employees who have joined before 30 Sep 81.
+
+SELECT *
+FROM employees
+WHERE hiredate < '1981-09-30';
+
+
+List names of employees who are not managers.
+
+
+SELECT ename
+FROM employees
+WHERE job <> 'MANAGER';
+
+
+List the names of employees whose employee numbers are 7369, 7521, 7839, 7934, 7788.
+
+SELECT ename
+FROM employees
+WHERE empno IN (7369, 7521, 7839, 7934, 7788);
+
+
+List employees not belonging to department 30, 40, or 10.
+
+SELECT *
+FROM employees
+WHERE deptno NOT IN (30, 40, 10);
+
+
+List employee names for those who have joined between 30 June and 31 Dec '81.
+
+SELECT ename
+FROM employees
+WHERE hiredate BETWEEN '1981-06-30' AND '1981-12-31';
+
+
+List the different designations in the company.
+
+SELECT DISTINCT job
+FROM employees;
+
+
+List the names of employees who are not eligible for commission.
+
+SELECT ename
+FROM employees
+WHERE comm IS NULL;
+
+
+List the name and designation of the employee who does not report to anybody.
+
+SELECT ename, job
+FROM employees
+WHERE mgr IS NULL;
+
+
+List the employees not assigned to any department.
+
+FROM employees
+WHERE deptno IS NULL;
+
+
+List the employees who are eligible for commission.
+
+SELECT ename
+FROM employees
+WHERE comm IS NOT NULL;
+
+
+List employees whose names either start or end with “S”.
+
+SELECT ename
+FROM employees
+WHERE ename LIKE 'S%' OR ename LIKE '%S';
+
+
+List names of employees whose names have “i” as the second character.
+
+SELECT ename
+FROM employees
+WHERE ename LIKE '_i%';
+
+
+List the number of employees working with the company.
+
+SELECT COUNT(*)
+FROM employees;
+
+
+List the number of designations available in the EMP table.
+SELECT COUNT(DISTINCT job)
+FROM employees;
+
+
+List the total salaries paid to the employees.
+SELECT SUM(sal)
+FROM employees;
+
+List the maximum, minimum and average salary in the company.
+
+SELECT MAX(sal), MIN(sal), AVG(sal)
+FROM employees;
+
+List the maximum salary paid to a salesman.
+
+SELECT MAX(sal)
+FROM employees
+WHERE job = 'SALESMAN';
+
+
+1. List the number of employees and average salary for employees in department 20.
+   SELECT COUNT(*), AVG(salary)
+   FROM employees
+   WHERE department_id = 20;
+  
+2. List name, salary, and PF amount of all employees. (PF is calculated as 10% of basic salary)
+   SELECT name, salary, salary * 0.1 AS pf_amount
+   FROM employees;
+ 
+
+3. List names of employees who are more than 2 years old in the company.
+   Assuming "more than 2 years old" means they have been employed for more than 2 years:
+
+   SELECT name
+   FROM employees
+   WHERE hire_date < DATE_SUB(CURDATE(), INTERVAL 2 YEAR);
+  
+
+4. List the employee details in the ascending order of their basic salary.
+ 
+   SELECT *
+   FROM employees
+   ORDER BY salary ASC;
+
+
+5. List the employee name and hire date in the descending order of the hire date.
+
+   SELECT name, hire_date
+   FROM employees
+   ORDER BY hire_date DESC;
+
+
+6. List employee name, salary, PF, HRA, DA, and gross; order the results in the ascending order of gross. HRA is 50% of the salary and DA is 30% of the salary.
+  
+   SELECT name, salary, salary * 0.1 AS pf, salary * 0.5 AS hra, salary * 0.3 AS da, salary + (salary * 0.1) + (salary * 0.5) + (salary * 0.3) AS gross
+   FROM employees
+   ORDER BY gross ASC;
+  
+
+7. List the department numbers and the number of employees in each department.
+  
+   SELECT department_id, COUNT(*)
+   FROM employees
+   GROUP BY department_id;
+
+8. List the department number and total salary payable in each department.
+   
+   SELECT department_id, SUM(salary)
+   FROM employees
+   GROUP BY department_id;
+   
+
+9. List the jobs and the number of employees in each job. The result should be in the descending order of the number of employees.
+ 
+   SELECT job_title, COUNT(*)
+   FROM employees
+   GROUP BY job_title
+   ORDER BY COUNT(*) DESC;
+ 
+
+10. List the total salary, maximum and minimum salary, and average salary of the employees job-wise.
+  
+   SELECT job_title, SUM(salary) AS total_salary, MAX(salary) AS max_salary, MIN(salary) AS min_salary, AVG(salary) AS avg_salary
+   FROM employees
+   GROUP BY job_title;
+  
+
+11. List the total salary, maximum and minimum salary, and average salary of the employees, for department 20.
+  
+   SELECT SUM(salary) AS total_salary, MAX(salary) AS max_salary, MIN(salary) AS min_salary, AVG(salary) AS avg_salary
+   FROM employees
+   WHERE department_id = 20;
+
+
+12. List the total salary, maximum and minimum salary, and average salary of the employees job-wise, for department 20 and display only those rows having an average salary > 1000.
+   
+   SELECT job_title, SUM(salary) AS total_salary, MAX(salary) AS max_salary, MIN(salary) AS min_salary, AVG(salary) AS avg_salary
+   FROM employees
+   WHERE department_id = 20
+   GROUP BY job_title
+   HAVING avg_salary > 1000;
+ 

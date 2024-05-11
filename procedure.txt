@@ -1,0 +1,67 @@
+create table stud
+ (
+  sno int(10), 
+  name varchar(10), 
+  sub1 int(3),
+  sub2 int(3),
+  sub3 int(3),
+  total int(3),
+  percentage float(5,2),
+  grade varchar(20)
+   );
+
+desc stud;
+
+
+insert into stud
+ values
+ (1,'AMIT',55,66,77,NULL,NULL,NULL),
+ (2,'AJIT',66,44,77,NULL,NULL,NULL),
+ (3,'VIRAT',50,60,70,NULL,NULL,NULL),
+ (4,'JIT',30,30,30,NULL,NULL,NULL),
+ (5,'RAHUL',52,62,57,NULL,NULL,NULL),
+ (6,'KAPIL',65,45,75,NULL,NULL,NULL),
+ (7,'ROHIT',52,60,50,NULL,NULL,NULL),
+ (8,'SUSHIL',67,46,75,NULL,NULL,NULL),
+ (9,'SACHIN',50,50,50,NULL,NULL,NULL),
+ (10,'SUNIL',60,40,70,NULL,NULL,NULL);
+ 
+select * from stud;
+
+DELIMITER //
+
+CREATE PROCEDURE calpercentage()
+BEGIN
+    DECLARE s1, s2, s3, tot INT(3);
+    DECLARE per FLOAT(5,2);
+    DECLARE grde VARCHAR(20);
+    DECLARE i, cnt, id INT(10);
+
+    SET i = 0;
+    SELECT COUNT(*) INTO cnt FROM stud;
+
+    WHILE i < cnt DO
+        SELECT sno, sub1, sub2, sub3 INTO id, s1, s2, s3 FROM stud LIMIT i, 1;
+
+        SET tot = s1 + s2 + s3;
+        SET per = tot / 3;
+
+        IF per > 40 THEN
+            SET grde = 'PASS';
+        ELSE
+            SET grde = 'FAIL';
+        END IF;
+
+        UPDATE student
+        SET total = tot,
+            percentage = per
+        WHERE sno = id;
+
+        SET i = i + 1;
+    END WHILE;
+END //
+
+call calpercentage()//
+
+select * from stud//
+

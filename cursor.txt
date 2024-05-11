@@ -1,0 +1,71 @@
+create database PVG;
+
+
+use PVG;
+
+                                                                                                
+create table student (sno int(10), name varchar(10), sub1 int(3), sub2 int(3), sub3 int(3), total int(3), percentage float(5,2));
+
+create table student_first (sno int(10), name varchar(10), sub1 int(3), sub2 int(3), sub3 int(3), total int(3), percentage float(5,2));
+
+ 
+create table student_pass (sno int(10), name varchar(10), sub1 int(3), sub2 int(3), sub3 int(3), total int(3), percentage float(5,2));
+
+
+create table student_fail (sno int(10), name varchar(10), sub1 int(3), sub2 int(3), sub3 int(3), total int(3), percentage float(5,2));
+
+ 
+desc student;
+ 
+desc student_first;
+ 
+desc student_pass;
+ 
+desc student_fail;
+
+
+insert into student values (1,'AMIT',55,66,77,NULL,NULL), (2,'AJIT',66,44,77,NULL,NULL), (3,'SUJIT',50,60,70,NULL,NULL), (4,'JIT',56,74,70,NULL,NULL), (5,'RAHUL',50,50,48,NULL,NULL), (6,'KAPIL',65,45,75,NULL,NULL), (7,'RAJ',52,60,50,NULL,NULL), (8,'SUSHIL',40,30,35,NULL,NULL), (9,'RAMESH',50,50,50,NULL,NULL), (10,'SUNIL',60,40,70,NULL,NULL);
+
+select * from student;        
+
+select * from student_first;
+
+select * from student_fail;
+
+DELIMITER //
+ 
+create procedure calgrade() begin
+declare s1,s2,s3,tot int(3);
+    declare id int(10);
+    declare per float(5,2);
+    declare sname varchar(10);
+    declare i,cnt int(3);
+   DECLARE stu_cur CURSOR FOR select sno,name,sub1,sub2,sub3 from student;
+    SET i=0;
+    select count(*) into cnt from student;
+    OPEN stu_cur;
+    REPEAT
+    FETCH stu_cur INTO id,sname,s1,s2,s3;
+        SET tot=(s1+s2+s3);
+        SET per=(tot/3);
+        IF per >= 60 THEN
+        insert into student_first values (id,sname,s1,s2,s3,tot,per);
+       ELSEIF per<60 and per>=50 THEN
+       insert into student_pass values (id,sname,s1,s2,s3,tot,per);
+       ELSE
+       insert into student_fail values (id,sname,s1,s2,s3,tot,per);
+       END IF;
+        update student set total=tot,percentage=per where sno=id;
+        SET i=i+1;
+    UNTIL i>=cnt END REPEAT;
+    CLOSE stu_cur;    
+    end  //
+
+
+call calgrade()//
+                                                                                                 
+select * from student_first//
+
+select * from student_pass//
+
+select * from student_fail//
